@@ -5,10 +5,11 @@ class TodoItemForm(forms.ModelForm):
 
     class Meta:
         model = TodoItem
-        fields = ('name', 'done')
-
+        fields = ('name',)
+        
+        
 class EditTodoItemForm(forms.ModelForm):
-    
+
     class Meta:
-       model = TodoItem
-       fields = ('name', 'done') 
+        model = TodoItem
+        fields = ('name', 'done')

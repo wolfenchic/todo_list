@@ -3,43 +3,46 @@ from django.http import HttpResponse
 from .models import TodoItem
 from .forms import TodoItemForm, EditTodoItemForm
 
-
-def get_todo_page(request):
+# Create your views here.
+def get_index(request):
     if request.method == "POST":
+        print("It's the POST")        
         form = TodoItemForm(request.POST)
         if form.is_valid():
-           form.save()
-    
+            form.save()
     else:
-        print("It's a get")
-        
-        
-    form = TodoItemForm()    
+        print("It's the GET")        
+
+    form = TodoItemForm()
     items = TodoItem.objects.all()
-    return render(request, "todo/todo_items.html", {'items': items, 'form': form})
+    return render(request, "todo/index.html", {'items': items, 'form': form})
+
+
+def edit_todo_item(request, id): 
+    item = get_object_or_404(TodoItem, pk=id)
+
+    if request.method == "POST":
+        print("It's the POST")
+        form = EditTodoItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect("todo_index")
+    else:
+        print("It's the GET")
+        
+    form = EditTodoItemForm(instance=item)
+    return render(request, "todo/todo_item_form.html", {'form': form})
+
+
 
 def delete_todo_item(request, id):
     item = get_object_or_404(TodoItem, pk=id)
     item.delete()
-    return redirect("/")
+    return redirect("todo_index")
     
-def toggle_todo_item(request, id):
-    item = get_object_or_404(TodoItem, pk=id) 
+def toggle_status(request, id):
+    print(request.method)
+    item = get_object_or_404(TodoItem, pk=id)
     item.done = not item.done
     item.save()
-    return redirect("/")
-
-def get_edit_todo_item(request, id):
-    item = get_object_or_404(TodoItem, pk=id) 
-    
-    if request.method == "POST":
-        print ("Its a POST")
-        form = EditTodoItemForm(request.POST, instance=item)
-        if form.is_valid():
-           form.save()
-           return redirect("/")
-    else: 
-        print ("GET")
-   
-    form = TodoItemForm(instance=item)
-    return render(request, "todo/todo_from_form.html", {'form': form})
+    return redirect("todo_index")

@@ -1,0 +1,14 @@
+h1 {
+    color: #DF744A;
+}
+body{
+    background-color: #FEDCD2;
+    font-family: 'Roboto Mono', monospace;
+    margin: 25px 50px 75px 100px;
+    color: #99d3df;
+    font-size: 2rem;
+}
+
+a {
+    color: #DF744A;
+}
